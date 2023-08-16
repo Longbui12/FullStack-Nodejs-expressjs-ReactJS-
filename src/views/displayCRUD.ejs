@@ -30,12 +30,12 @@
       outline: none;
       border: none;
       background: red;
-      height: 25px;
-      width: 60px;
+      height: 23px;
+      width: 55px;
       cursor: pointer;
       border: 2px solid rgb(40, 38, 38);
       border-radius: 5px;
-      margin: 5px 5px;
+      margin: 3px 3px;
     }
   </style>
   <body>
@@ -67,10 +67,37 @@
             class="btn-edit"
             >Edit</a
           >
-          <a href="" type="button" class="btn-delete">Delete</a>
+          <!-- <a
+            href="/delete-crud?id=<%= dataTable[i].id %>"
+            type="button"
+            class="btn-delete"
+            >Delete
+          </a> -->
+          <button
+            type="button"
+            class="btn-delete"
+            onclick="showDeleteConfirmation('<%= dataTable[i].id %>')"
+          >
+            Delete
+          </button>
         </td>
       </tr>
       <% } %>
     </table>
+    <script>
+      function showDeleteConfirmation(userId) {
+        const confirmation = window.confirm(
+          "Are you sure you want to delete this user?"
+        );
+        if (confirmation) {
+          const deleteConfirmed = window.confirm(
+            "This action cannot be undone. Do you really want to delete?"
+          );
+          if (deleteConfirmed) {
+            window.location.href = `/delete-crud?id=${userId}`;
+          }
+        }
+      }
+    </script>
   </body>
 </html>

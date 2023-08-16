@@ -16,17 +16,17 @@ let testPage = (req, res) => {
   return res.render("test/aboutPage.ejs");
 };
 
-const getCRUD = (req, res) => {
+let getCRUD = (req, res) => {
   return res.render("crudPage.ejs");
 };
 
-const postCRUD = async (req, res) => {
+let postCRUD = async (req, res) => {
   let message = await CRUDService.createNewUser(req.body);
   console.log(message);
   return res.send("<h1>Post CRUD from server 🎁🎁🎁 </h1>");
 };
 
-const displayGetCRUD = async (req, res) => {
+let displayGetCRUD = async (req, res) => {
   let data = await CRUDService.getAllUser();
   return res.render("displayCRUD.ejs", {
     dataTable: data,
@@ -47,12 +47,23 @@ let getEditCRUD = async (req, res) => {
   }
 };
 
-const putCRUD = async (req, res) => {
+let putCRUD = async (req, res) => {
   let data = req.body;
   let allUsers = await CRUDService.updateUserData(data);
   return res.render("displayCRUD.ejs", {
     dataTable: allUsers,
   });
+};
+
+let deleteCRUD = async (req, res) => {
+  let id = req.query.id;
+  if (id) {
+    await CRUDService.deleteUserById(id);
+    //return res.send("deleted the user succeed 👌👌 !!");
+    return res.redirect("/get-crud"); // Redirect to the listing page
+  } else {
+    return res.send("User not found !! 🤬🤬🤬");
+  }
 };
 
 module.exports = {
@@ -63,4 +74,5 @@ module.exports = {
   displayGetCRUD,
   getEditCRUD,
   putCRUD,
+  deleteCRUD,
 };
