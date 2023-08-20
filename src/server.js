@@ -3,6 +3,7 @@ import express from "express";
 import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
 import connetDB from "./config/connectDB";
+import initAPIRoutes from "./route/api";
 
 require("dotenv").config();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 // init web route
 viewEngine(app);
 initWebRoutes(app);
+initAPIRoutes(app);
 
 connetDB();
 
