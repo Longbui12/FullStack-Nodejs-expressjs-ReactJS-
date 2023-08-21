@@ -14,8 +14,9 @@ let handleUserLogin = (email, passWord) => {
         });
 
         if (user) {
-          // compare passWord
-          let check = await bcrypt.compareSync(passWord, user.passWord);
+          // compare passWord :
+          //   let check = bcrypt.compareSync(passWord, user.passWord);
+          let check = await bcrypt.compare(passWord, user.passWord);
 
           if (check) {
             userData.errCode = 0;
@@ -58,7 +59,36 @@ let checkUserEmail = (userEmail) => {
     }
   });
 };
+
+let getAllUsers = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let users = "";
+      if (userId === "ALL") {
+        users = await db.User.findAll({
+          // delete passWord
+          attributes: {
+            exclude: ["passWord"],
+          },
+        });
+      }
+      if (userId && userId !== "ALL") {
+        users = await db.User.findOne({
+          where: { id: userId },
+          // delete passWord
+          attributes: {
+            exclude: ["passWord"],
+          },
+        });
+      }
+      resolve(users);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   handleUserLogin,
   //   checkUserEmail,
+  getAllUsers,
 };
