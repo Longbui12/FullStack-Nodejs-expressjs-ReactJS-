@@ -1,6 +1,8 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 
+const salt = bcrypt.genSaltSync(10);
+
 let handleUserLogin = (email, passWord) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -87,8 +89,122 @@ let getAllUsers = (userId) => {
     }
   });
 };
+
+let createNewUser = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // check email is exist ??
+      let check = await checkUserEmail(data.email);
+      if (check === true) {
+        resolve({
+          errCode: 1,
+          message: "Your email is already in use, Please try another email !!",
+        });
+      }
+      let hashPasswordFromBcrypt = await hashUserPassword(data.passWord);
+      await db.User.create({
+        email: data.email,
+        passWord: hashPasswordFromBcrypt,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        phonenumber: data.phonenumber,
+        gender: data.gender === "1" ? true : false,
+        roleId: data.roleId,
+      });
+      resolve({
+        errCode: 0,
+        message: "OK",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let hashUserPassword = (passWord) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let hashPassword = await bcrypt.hashSync(passWord, salt);
+      resolve(hashPassword);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let deleteUser = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { id: userId },
+      });
+      if (!user) {
+        resolve({
+          errCode: 2,
+          errMessage: `The user isn't exist !`,
+        });
+      }
+      // if (user) {
+      //   await user.destroy();
+      // }
+      await db.User.destroy({
+        where: { id: userId },
+      });
+      resolve({
+        errCode: 0,
+        message: "The user is delete",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let updateUserData = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          errMessage: "Missing required parameters !",
+        });
+      }
+      let user = await db.User.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      let hashPasswordFromBcrypt = await hashUserPassword(data.passWord);
+      if (user) {
+        user.email = data.email;
+        user.passWord = hashPasswordFromBcrypt;
+        user.firstName = data.firstName;
+        user.lastName = data.lastName;
+        user.address = data.address;
+        user.phonenumber = data.phonenumber;
+        user.gender = data.gender;
+        user.roleId = data.roleId;
+        await user.save();
+
+        resolve({
+          errCode: 0,
+          message: "Update the user succeeds !!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: `User's not Found !!`,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   handleUserLogin,
-  //   checkUserEmail,
   getAllUsers,
+  createNewUser,
+  deleteUser,
+  updateUserData,
 };
