@@ -10,6 +10,9 @@ const initAPIRoutes = (app) => {
   router.put("/edit-user", APIController.handleEditUser);
   router.delete("/delete-user", APIController.handleDeleteUser);
 
+  // write APi for models (allcodes)
+  router.get("/allcode", APIController.getAllCode);
+
   return app.use("/api", router);
 };
 export default initAPIRoutes;

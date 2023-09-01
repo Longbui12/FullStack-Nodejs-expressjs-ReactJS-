@@ -4,7 +4,7 @@ let handleLogin = async (req, res) => {
   let email = req.body.email;
   //console.log("your email : " + email);
   let passWord = req.body.passWord;
-  // console.log("your password : " + password);
+  //console.log("your password : " + passWord);
   if (!email || !passWord) {
     return res.status(500).json({
       errCode: 1,
@@ -60,10 +60,25 @@ let handleDeleteUser = async (req, res) => {
   let message = await APIService.deleteUser(req.body.id);
   return res.status(200).json(message);
 };
+// get Allcode in models
+let getAllCode = async (req, res) => {
+  try {
+    let data = await APIService.getAllCodeService(req.query.type);
+    console.log(data);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Get all code error :", e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server ",
+    });
+  }
+};
 module.exports = {
   handleLogin,
   handleGetAllUsers,
   handleCreateNewUser,
   handleEditUser,
   handleDeleteUser,
+  getAllCode,
 };

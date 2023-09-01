@@ -16,14 +16,15 @@ let handleUserLogin = (email, passWord) => {
         });
 
         if (user) {
+          //console.log("user", user);
           // compare passWord :
-          //   let check = bcrypt.compareSync(passWord, user.passWord);
+          //let check = bcrypt.compareSync(passWord, user.passWord);
           let check = await bcrypt.compare(passWord, user.passWord);
 
-          if (check) {
+          if (!check) {
             userData.errCode = 0;
             userData.errMessage = "OK";
-            console.log(user);
+
             delete user.passWord;
             userData.user = user;
           } else {
@@ -203,10 +204,34 @@ let updateUserData = (data) => {
     }
   });
 };
+
+let getAllCodeService = (typeInput) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!typeInput) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameters !",
+        });
+      } else {
+        let res = {};
+        let allCode = await db.Allcode.findAll({
+          where: { type: typeInput },
+        });
+        res.errCode = 0;
+        res.data = allCode;
+        resolve(res);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   handleUserLogin,
   getAllUsers,
   createNewUser,
   deleteUser,
   updateUserData,
+  getAllCodeService,
 };
