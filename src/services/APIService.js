@@ -10,7 +10,7 @@ let handleUserLogin = (email, passWord) => {
       let isExist = await checkUserEmail(email);
       if (isExist) {
         let user = await db.User.findOne({
-          attributes: ["email", "roleId", "passWord"],
+          attributes: ["email", "roleId", "passWord", "firstName", "lastName"],
           where: { email: email },
           raw: true,
         });
@@ -18,18 +18,17 @@ let handleUserLogin = (email, passWord) => {
         if (user) {
           //console.log("user", user);
           // compare passWord :
-          //let check = bcrypt.compareSync(passWord, user.passWord);
+          // let check = await bcrypt.compareSync(passWord, user.passWord);
           let check = await bcrypt.compare(passWord, user.passWord);
 
-          if (!check) {
+          if (check) {
             userData.errCode = 0;
             userData.errMessage = "OK";
-
             delete user.passWord;
             userData.user = user;
           } else {
             userData.errCode = 3;
-            userData.errMessage = "Wrong passWord";
+            userData.errMessage = "Wrong password";
           }
         } else {
           userData.errCode = 2;
@@ -111,8 +110,9 @@ let createNewUser = (data) => {
           lastName: data.lastName,
           address: data.address,
           phonenumber: data.phonenumber,
-          gender: data.gender === "1" ? true : false,
+          gender: data.gender,
           roleId: data.roleId,
+          positionId: data.positionId,
         });
         resolve({
           errCode: 0,
