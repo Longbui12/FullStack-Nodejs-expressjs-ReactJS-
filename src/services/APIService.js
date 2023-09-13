@@ -167,7 +167,7 @@ let deleteUser = (userId) => {
 let updateUserData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.id) {
+      if (!data.id || !data.roleId || !data.positionId || !data.gender) {
         resolve({
           errCode: 2,
           errMessage: "Missing required parameters !",
@@ -177,16 +177,17 @@ let updateUserData = (data) => {
         where: { id: data.id },
         raw: false,
       });
-      let hashPasswordFromBcrypt = await hashUserPassword(data.passWord);
+      //let hashPasswordFromBcrypt = await hashUserPassword(data.passWord);
       if (user) {
-        user.email = data.email;
-        user.passWord = hashPasswordFromBcrypt;
+        //user.email = data.email;
+        // user.passWord = hashPasswordFromBcrypt;
         user.firstName = data.firstName;
         user.lastName = data.lastName;
         user.address = data.address;
         user.phonenumber = data.phonenumber;
         user.gender = data.gender;
         user.roleId = data.roleId;
+        user.positionId = data.positionId;
         await user.save();
 
         resolve({
