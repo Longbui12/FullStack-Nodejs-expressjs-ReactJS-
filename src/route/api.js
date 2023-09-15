@@ -1,5 +1,6 @@
 import express from "express";
 import APIController from "../controllers/APIController";
+import doctorController from "../controllers/doctorController";
 
 let router = express.Router();
 
@@ -12,6 +13,7 @@ const initAPIRoutes = (app) => {
 
   // write APi for models (allcodes)
   router.get("/allcode", APIController.getAllCode);
+  router.get("/top-docdor-home", doctorController.getTopDoctorHome);
 
   return app.use("/api", router);
 };
