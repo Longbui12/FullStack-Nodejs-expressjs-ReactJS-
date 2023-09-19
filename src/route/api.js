@@ -15,6 +15,9 @@ const initAPIRoutes = (app) => {
   router.get("/allcode", APIController.getAllCode);
   router.get("/top-docdor-home", doctorController.getTopDoctorHome);
 
+  // write API for Manage-doctor
+  router.get("/get-all-doctors", doctorController.getAllDoctors);
+  router.post("/save-infor-doctors", doctorController.postInforDoctor);
   return app.use("/api", router);
 };
 export default initAPIRoutes;
