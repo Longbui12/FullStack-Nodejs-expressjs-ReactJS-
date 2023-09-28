@@ -22,6 +22,7 @@ const initAPIRoutes = (app) => {
 
   // write API for schedule-doctor
   router.post("/bulk-create-schedule", doctorController.bulkCreateSchedule);
+  router.get("/get-shedule-doctor-by-date", doctorController.getScheduleByDate);
 
   return app.use("/api", router);
 };
