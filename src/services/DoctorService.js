@@ -1,7 +1,7 @@
 import db from "../models/index";
 //import bcrypt from "bcryptjs";
 require("dotenv").config();
-import _ from "lodash";
+import _, { reject } from "lodash";
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 let getTopDoctorHomeService = (limitInput) => {
@@ -295,6 +295,53 @@ let getScheduleByDateService = (doctorId, date) => {
   });
 };
 
+let getExtraInforDoctorByIdService = (idInput) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idInput) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter !!",
+        });
+      } else {
+        let data = await db.Doctor_infor.findOne({
+          where: {
+            doctorId: idInput,
+          },
+          attributes: {
+            exclude: ["id", "doctorId"],
+          },
+          include: [
+            {
+              model: db.Allcode,
+              as: "priceTypeData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            {
+              model: db.Allcode,
+              as: "provinceTypeData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            {
+              model: db.Allcode,
+              as: "paymentTypeData",
+              attributes: ["valueEn", "valueVi"],
+            },
+          ],
+          raw: false,
+          nest: true,
+        });
+        if (!data) data = {};
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   getTopDoctorHomeService,
   getAllDoctorsService,
@@ -302,4 +349,5 @@ module.exports = {
   getDetailDoctorByIdService,
   bulkCreateScheduleService,
   getScheduleByDateService,
+  getExtraInforDoctorByIdService,
 };
