@@ -29,6 +29,10 @@ const initAPIRoutes = (app) => {
     doctorController.getExtraInforDoctorById
   );
 
+  router.get(
+    "/get-profile-doctor-by-id",
+    doctorController.getProfileDoctorById
+  );
   return app.use("/api", router);
 };
 export default initAPIRoutes;
