@@ -1,7 +1,7 @@
 import express from "express";
 import APIController from "../controllers/APIController";
 import doctorController from "../controllers/doctorController";
-
+import patientController from "../controllers/patientController";
 let router = express.Router();
 
 const initAPIRoutes = (app) => {
@@ -33,6 +33,12 @@ const initAPIRoutes = (app) => {
     "/get-profile-doctor-by-id",
     doctorController.getProfileDoctorById
   );
+
+  router.post(
+    "/patient-book-appointment",
+    patientController.postBookAppointment
+  );
+
   return app.use("/api", router);
 };
 export default initAPIRoutes;
