@@ -39,6 +39,11 @@ const initAPIRoutes = (app) => {
     patientController.postBookAppointment
   );
 
+  router.post(
+    "/verify-book-appointment",
+    patientController.postVerifyBookAppointment
+  );
+
   return app.use("/api", router);
 };
 export default initAPIRoutes;
