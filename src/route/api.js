@@ -2,6 +2,7 @@ import express from "express";
 import APIController from "../controllers/APIController";
 import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
+import specialtyController from "../controllers/specialtyController";
 let router = express.Router();
 
 const initAPIRoutes = (app) => {
@@ -43,6 +44,8 @@ const initAPIRoutes = (app) => {
     "/verify-book-appointment",
     patientController.postVerifyBookAppointment
   );
+
+  router.post("/create-new-specialty", specialtyController.createSpecialty);
 
   return app.use("/api", router);
 };
