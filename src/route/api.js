@@ -47,6 +47,8 @@ const initAPIRoutes = (app) => {
 
   router.post("/create-new-specialty", specialtyController.createSpecialty);
 
+  router.get("/get-all-specialty", specialtyController.getAllSpecialty);
+
   return app.use("/api", router);
 };
 export default initAPIRoutes;
