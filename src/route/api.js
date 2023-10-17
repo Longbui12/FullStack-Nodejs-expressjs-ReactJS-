@@ -49,6 +49,11 @@ const initAPIRoutes = (app) => {
 
   router.get("/get-all-specialty", specialtyController.getAllSpecialty);
 
+  router.get(
+    "/get-detail-specialty-by-id",
+    specialtyController.getDetailSpecialtyById
+  );
+
   return app.use("/api", router);
 };
 export default initAPIRoutes;
