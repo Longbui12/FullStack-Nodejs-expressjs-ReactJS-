@@ -3,6 +3,7 @@ import APIController from "../controllers/APIController";
 import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
 import specialtyController from "../controllers/specialtyController";
+import clinicController from "../controllers/clinicController";
 let router = express.Router();
 
 const initAPIRoutes = (app) => {
@@ -53,6 +54,16 @@ const initAPIRoutes = (app) => {
     "/get-detail-specialty-by-id",
     specialtyController.getDetailSpecialtyById
   );
+
+  // API for Clinic
+  router.post("/create-new-clinic", clinicController.createClinic);
+
+  // router.get("/get-all-specialty", specialtyController.getAllSpecialty);
+
+  // router.get(
+  //   "/get-detail-specialty-by-id",
+  //   specialtyController.getDetailSpecialtyById
+  // );
 
   return app.use("/api", router);
 };
