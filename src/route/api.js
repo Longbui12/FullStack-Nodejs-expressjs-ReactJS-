@@ -36,6 +36,10 @@ const initAPIRoutes = (app) => {
     doctorController.getProfileDoctorById
   );
 
+  router.get(
+    "/get-list-patient-for-doctor",
+    doctorController.getListPatientForDoctor
+  );
   router.post(
     "/patient-book-appointment",
     patientController.postBookAppointment
