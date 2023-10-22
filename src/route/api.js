@@ -65,6 +65,8 @@ const initAPIRoutes = (app) => {
   router.get("/get-all-clinic", clinicController.getAllClinic);
 
   router.get("/get-detail-clinic-by-id", clinicController.getDetailClinicById);
+  //========================
+  router.post("/send-remedy", doctorController.sendRemedy);
 
   return app.use("/api", router);
 };

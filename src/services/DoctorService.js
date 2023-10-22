@@ -2,6 +2,7 @@ import db from "../models/index";
 //import bcrypt from "bcryptjs";
 require("dotenv").config();
 import _, { reject } from "lodash";
+import EmailService from "../services/EmailService";
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 let getTopDoctorHomeService = (limitInput) => {
@@ -488,6 +489,43 @@ let getListPatientForDoctorService = (doctorId, date) => {
     }
   });
 };
+
+let sendRemedyService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.email || !data.doctorId || !data.patientId || !data.timeType) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter !!",
+        });
+      } else {
+        // Update patient status
+
+        let appoiment = await db.Booking.findOne({
+          where: {
+            doctorId: data.doctorId,
+            patientId: data.patientId,
+            timeType: data.timeType,
+            statusId: "S2",
+          },
+          raw: false,
+        });
+        if (appoiment) {
+          appoiment.statusId = "S3";
+          await appoiment.save();
+        }
+        // send email remedy
+        await EmailService.sendAttachment(data);
+        resolve({
+          errCode: 0,
+          errMessage: "OK",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   getTopDoctorHomeService,
   getAllDoctorsService,
@@ -498,4 +536,5 @@ module.exports = {
   getExtraInforDoctorByIdService,
   getProfileDoctorByIdService,
   getListPatientForDoctorService,
+  sendRemedyService,
 };
