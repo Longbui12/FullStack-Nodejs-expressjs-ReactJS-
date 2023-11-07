@@ -2,9 +2,9 @@ import APIService from "../services/APIService";
 
 let handleLogin = async (req, res) => {
   let email = req.body.email;
-  //console.log("your email : " + email);
+
   let passWord = req.body.passWord;
-  //console.log("your password : " + passWord);
+
   if (!email || !passWord) {
     return res.status(500).json({
       errCode: 1,
